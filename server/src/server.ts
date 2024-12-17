@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+console.log(process.env.PORT);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
