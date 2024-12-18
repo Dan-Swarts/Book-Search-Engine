@@ -39,6 +39,13 @@ const resolvers = {
       return Book.find(query);
     },
   },
+
+  Mutation: {
+    createUser: async (_: any, args: IUserQuery): Promise<IUser | null> => {
+      const user = await User.create(args);
+      return user;
+    },
+  },
 };
 
 export default resolvers;
