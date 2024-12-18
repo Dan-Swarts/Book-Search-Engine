@@ -1,4 +1,4 @@
-import { User, IUser } from "./User.js";
-import { Book, IBook } from "./Book.js";
+import { User, IUser, IUserQuery } from "./User.js";
+import { Book, IBook, IBookQuery } from "./Book.js";
 
-export { User, IUser, Book, IBook };
+export { User, IUser, IUserQuery, Book, IBook, IBookQuery };

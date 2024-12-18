@@ -9,6 +9,15 @@ export interface IBook extends Document {
   link: string;
 }
 
+export interface IBookQuery {
+  bookId?: string;
+  title?: string;
+  authors?: string[];
+  description?: string;
+  image?: string;
+  link?: string;
+}
+
 // This is a subdocument schema, it won't become its own model but we'll use it as the schema for the User's `savedBooks` array in User.js
 export const bookSchema = new Schema<IBook>({
   authors: [

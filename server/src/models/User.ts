@@ -14,6 +14,15 @@ export interface IUser extends Document {
   bookCount: number;
 }
 
+export interface IUserQuery {
+  id?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  savedBooks?: IBook[];
+  bookCount?: number;
+}
+
 const userSchema = new Schema<IUser>(
   {
     username: {

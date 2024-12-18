@@ -18,8 +18,10 @@ const typeDefs = `
   }
   
   type Query {
-    user: [User]
-    book: [Book]
+    allUsers: [User]
+    allBooks: [Book]
+    userSearch(username: String, email: String, password: String): [User]
+    bookSearch(title: String, authers: [String], description: String): [Book]
   }
 
   type Mutation {
