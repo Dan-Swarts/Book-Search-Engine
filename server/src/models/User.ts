@@ -2,15 +2,14 @@ import { Schema, model, type Document } from "mongoose";
 import bcrypt from "bcrypt";
 
 // import schema from Book.js
-import bookSchema from "./Book.js";
-import type { BookDocument } from "./Book.js";
+import { IBook, bookSchema } from "./Book.js";
 
 export interface IUser extends Document {
   id: string;
   username: string;
   email: string;
   password: string;
-  savedBooks: BookDocument[];
+  savedBooks: IBook[];
   isCorrectPassword(password: string): Promise<boolean>;
   bookCount: number;
 }
@@ -63,6 +62,4 @@ userSchema.virtual("bookCount").get(function () {
   return this.savedBooks.length;
 });
 
-const User = model("User", userSchema);
-
-export default User;
+export const User = model("User", userSchema);
