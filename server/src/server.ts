@@ -7,6 +7,9 @@ import { typeDefs, resolvers } from "./schemas/index.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -27,10 +30,13 @@ const startApolloServer = async () => {
 
   // if we're in production, serve client/build as static assets
   if (process.env.NODE_ENV === "production") {
+    console.log("prod");
     app.use(express.static(path.join(__dirname, "../../client/dist")));
-  }
 
-  // app.use(routes);
+    app.get("*", (_req, res) => {
+      res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+    });
+  }
 
   db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
