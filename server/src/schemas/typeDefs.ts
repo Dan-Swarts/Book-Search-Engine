@@ -21,7 +21,7 @@ const typeDefs = `
     allUsers: [User]
     allBooks: [Book]
     userSearch(username: String, email: String, password: String): [User]
-    bookSearch(title: String, authers: [String], description: String): [Book]
+    bookSearch(title: String, authors: [String], description: String): [Book]
   }
 
   type Mutation {

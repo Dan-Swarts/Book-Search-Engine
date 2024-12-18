@@ -25,15 +25,18 @@ const resolvers = {
       if (email) query.email = email;
       if (password) query.password = password;
 
-      return User.find({
-        username: username,
-        email: email,
-        password: password,
-      });
+      return User.find(query);
     },
 
-    bookSearch: async (_: any, _args: IBookQuery): Promise<IBook[] | null> => {
-      return Book.find({});
+    bookSearch: async (_: any, args: IBookQuery): Promise<IBook[] | null> => {
+      const { title, authors, description } = args;
+
+      const query: IBookQuery = {};
+      if (title) query.title = title;
+      if (authors) query.authors = authors;
+      if (description) query.description = description;
+
+      return Book.find(query);
     },
   },
 };
