@@ -27,7 +27,6 @@ export const bookSchema = new Schema<IBook>({
   ],
   description: {
     type: String,
-    required: true,
   },
   // saved book id from GoogleBooks
   bookId: {

@@ -74,6 +74,59 @@ const resolvers = {
 
       return { token, user };
     },
+    saveBook: async (_: any, args: any, context: any): Promise<any> => {
+      if (!context.user) {
+        throw new AuthenticationError("cound not authenicate user.");
+      }
+
+      const user = await User.findOne({ _id: context.user._id });
+
+      if (!user) {
+        throw new AuthenticationError("cound not authenicate user.");
+      }
+
+      const { book } = args;
+
+      if (
+        user.savedBooks.some((savedBook) => savedBook.bookId === book.bookId)
+      ) {
+        throw new Error("Book is already saved.");
+      }
+
+      user.savedBooks.push(book);
+
+      await user.save();
+
+      return user;
+    },
+    deleteBook: async (_: any, args: any, context: any): Promise<any> => {
+      if (!context.user) {
+        throw new AuthenticationError("cound not authenicate user.");
+      }
+
+      const user = await User.findOne({ _id: context.user._id });
+
+      if (!user) {
+        throw new AuthenticationError("cound not authenicate user.");
+      }
+
+      const { bookId } = args;
+
+      // Find the index of the book to be removed
+      const bookIndex = user.savedBooks.findIndex(
+        (savedBook) => savedBook.bookId === bookId
+      );
+
+      // Throw error if the book wasn't found
+      if (bookIndex == -1) {
+        throw new Error("Book is not found in the database.");
+      }
+
+      // Delete book from database
+      user.savedBooks.splice(bookIndex, 1);
+      await user.save();
+      return user;
+    },
   },
 };
 
