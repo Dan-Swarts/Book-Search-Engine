@@ -7,6 +7,8 @@ import {
   IBookQuery,
 } from "../models/index.js";
 
+import { signToken } from "../utils/auth.js";
+
 const resolvers = {
   Query: {
     allUsers: async (): Promise<IUser[] | null> => {
@@ -41,9 +43,12 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_: any, args: IUserQuery): Promise<IUser | null> => {
+    createUser: async (_: any, args: IUserQuery): Promise<any> => {
       const user = await User.create(args);
-      return user;
+
+      const token = signToken(user.username, user.email, user._id);
+
+      return { token, user };
     },
   },
 };

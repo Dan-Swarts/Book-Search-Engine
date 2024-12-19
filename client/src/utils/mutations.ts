@@ -1,10 +1,9 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_USER = gql`
-  query getAllBooks {
-    allBooks {
-      title
-      authors
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
+      token
     }
   }
 `;

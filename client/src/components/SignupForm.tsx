@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-import Auth from "../utils/auth";
 import type { User } from "../models/User";
 import { CREATE_USER } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
@@ -39,9 +38,9 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const newUser = await createUser({ variables: userFormData });
-
-      console.log(newUser);
+      const { data } = await createUser({ variables: userFormData });
+      const token = data.createUser.token;
+      console.log(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
