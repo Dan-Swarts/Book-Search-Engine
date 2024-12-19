@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
-import { deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
 import type { User } from "../models/User";
 
 import { GET_ME } from "../utils/queries";
 import { useQuery } from "@apollo/client";
+
+import { DELETE_BOOK } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState<User>({
@@ -18,6 +20,7 @@ const SavedBooks = () => {
   });
 
   const { data, loading } = useQuery<any>(GET_ME);
+  const [deleteBook] = useMutation(DELETE_BOOK);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -27,8 +30,6 @@ const SavedBooks = () => {
         if (!token) {
           return;
         }
-
-        console.log(data.getUser);
 
         if (data) {
           setUserData(data.getUser);
@@ -50,14 +51,9 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const { data } = await deleteBook({ variables: { bookId: bookId } });
 
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
+      setUserData(data.deleteBook);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
