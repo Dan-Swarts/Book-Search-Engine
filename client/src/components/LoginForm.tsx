@@ -38,8 +38,10 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
+      console.log(userFormData);
       const { data } = await login({ variables: userFormData });
-      const token = data.login.user;
+      console.log(data);
+      const token = data.login.token;
       Auth.login(token);
     } catch (err) {
       console.error(err);

@@ -40,6 +40,13 @@ const resolvers = {
 
       return Book.find(query);
     },
+    getUser: async (_: any, _args: any, context: any): Promise<any> => {
+      if (context.user) {
+        return User.findOne({ _id: context.user._id });
+      }
+
+      throw new AuthenticationError("cound not authenicate user.");
+    },
   },
 
   Mutation: {
@@ -64,6 +71,7 @@ const resolvers = {
       }
 
       const token = signToken(user.username, user.email, user._id);
+
       return { token, user };
     },
   },

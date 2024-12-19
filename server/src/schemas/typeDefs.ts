@@ -36,6 +36,7 @@ const typeDefs = `
     allBooks: [Book]
     userSearch(username: String, email: String, password: String): [User]
     bookSearch(title: String, authors: [String], description: String): [Book]
+    getUser: User
   }
 
   type Mutation {

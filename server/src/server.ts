@@ -8,6 +8,7 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 
 import dotenv from "dotenv";
+import { authenticateToken } from "./utils/auth.js";
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +27,12 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.use("/graphql", expressMiddleware(server));
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: authenticateToken,
+    })
+  );
 
   // if we're in production, serve client/build as static assets
   if (process.env.NODE_ENV === "production") {

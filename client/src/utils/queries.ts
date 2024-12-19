@@ -8,3 +8,18 @@ export const QUERY_ALl_BOOKS = gql`
     }
   }
 `;
+
+export const GET_ME = gql`
+  query getme {
+    getUser {
+      username
+      email
+      savedBooks {
+        title
+        authors
+        description
+        image
+      }
+    }
+  }
+`;
