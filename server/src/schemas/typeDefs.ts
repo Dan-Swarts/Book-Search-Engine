@@ -41,7 +41,8 @@ const typeDefs = `
   type Mutation {
     _dummy: String
     createUser(username: String!, email: String!, password: String!, savedBooks: [BookInput]): Auth
-  }
+    login(email: String!,password: String!): Auth
+    }
 `;
 
 export default typeDefs;

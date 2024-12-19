@@ -7,7 +7,7 @@ import {
   IBookQuery,
 } from "../models/index.js";
 
-import { signToken } from "../utils/auth.js";
+import { signToken, AuthenticationError } from "../utils/auth.js";
 
 const resolvers = {
   Query: {
@@ -43,11 +43,27 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: async (_: any, args: IUserQuery): Promise<any> => {
+    createUser: async (_: any, args: any): Promise<any> => {
       const user = await User.create(args);
 
       const token = signToken(user.username, user.email, user._id);
 
+      return { token, user };
+    },
+    login: async (_: any, args: any): Promise<any> => {
+      const { email, password } = args;
+      const user = await User.findOne({ email: email });
+      if (!user) {
+        throw new AuthenticationError("Could not authenticate user.");
+      }
+
+      const correctPassword = await user.isCorrectPassword(password);
+
+      if (!correctPassword) {
+        throw new AuthenticationError("Could not authenticate user.");
+      }
+
+      const token = signToken(user.username, user.email, user._id);
       return { token, user };
     },
   },
