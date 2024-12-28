@@ -1,27 +1,47 @@
 import express from "express";
 import path from "node:path";
-import db from "./config/connection.js";
-import routes from "./routes/index.js";
+// import db from "./config/connection.js";
+// import routes from "./routes/index.js";
 import { Request, Response } from "express";
 import { fileURLToPath } from "node:url";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { authenticateToken } from "./services/auth.js";
+import { typeDefs, resolvers } from "./schemas/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.use(express.static(path.join(__dirname, "../../client/dist")));
-
-app.get("*", (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
 });
 
-app.use(routes);
+const startApolloServer = async () => {
+  await server.start();
 
-db.once("open", () => {
-  app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
-});
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: authenticateToken,
+    })
+  );
+
+  app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+  app.get("*", (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+  });
+
+  app.listen(PORT, () => {
+    console.log(`🌍 API server running on localhost:${PORT}`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  });
+};
+
+startApolloServer();
