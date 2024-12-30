@@ -1,13 +1,13 @@
 import express from "express";
-import path from "node:path";
-// import db from "./config/connection.js";
-// import routes from "./routes/index.js";
-import { Request, Response } from "express";
-import { fileURLToPath } from "node:url";
+import db from "./config/connection.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { authenticateToken } from "./services/auth.js";
 import { typeDefs, resolvers } from "./schemas/index.js";
+
+import { Request, Response } from "express";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,6 +37,8 @@ const startApolloServer = async () => {
   app.get("*", (_req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
   });
+
+  db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
   app.listen(PORT, () => {
     console.log(`🌍 API server running on localhost:${PORT}`);
