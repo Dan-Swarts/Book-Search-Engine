@@ -24,11 +24,11 @@ const SavedBooks = () => {
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-        if (!token) {
+        if (!token || loading) {
           return;
         }
 
-        console.log(data.getUser);
+        console.log(data);
 
         if (data) {
           setUserData(data.getUser);
