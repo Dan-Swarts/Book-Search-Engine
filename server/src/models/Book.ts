@@ -1,6 +1,6 @@
-import { Schema, type Document } from 'mongoose';
+import { Schema, model, type Document } from "mongoose";
 
-export interface BookDocument extends Document {
+export interface IBook extends Document {
   bookId: string;
   title: string;
   authors: string[];
@@ -9,8 +9,17 @@ export interface BookDocument extends Document {
   link: string;
 }
 
+export interface IBookQuery {
+  bookId?: string;
+  title?: string;
+  authors?: string[];
+  description?: string;
+  image?: string;
+  link?: string;
+}
+
 // This is a subdocument schema, it won't become its own model but we'll use it as the schema for the User's `savedBooks` array in User.js
-const bookSchema = new Schema<BookDocument>({
+export const bookSchema = new Schema<IBook>({
   authors: [
     {
       type: String,
@@ -18,7 +27,6 @@ const bookSchema = new Schema<BookDocument>({
   ],
   description: {
     type: String,
-    required: true,
   },
   // saved book id from GoogleBooks
   bookId: {
@@ -37,4 +45,4 @@ const bookSchema = new Schema<BookDocument>({
   },
 });
 
-export default bookSchema;
+export const Book = model("Book", bookSchema);

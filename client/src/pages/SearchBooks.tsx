@@ -33,7 +33,7 @@ const SearchBooks = () => {
     event.preventDefault();
 
     if (!searchInput) {
-      return false;
+      return;
     }
 
     try {
@@ -71,7 +71,7 @@ const SearchBooks = () => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
-      return false;
+      return;
     }
 
     try {
