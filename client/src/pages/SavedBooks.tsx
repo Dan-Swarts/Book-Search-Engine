@@ -19,6 +19,7 @@ const SavedBooks = () => {
   });
 
   const { data, loading } = useQuery<any>(GET_ME);
+  const userDataLength = Object.keys(userData).length;
   const [deleteBook] = useMutation(DELETE_BOOK);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const SavedBooks = () => {
     };
 
     getUserData();
-  }, [loading]);
+  }, [loading, userDataLength]);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId: any) => {
