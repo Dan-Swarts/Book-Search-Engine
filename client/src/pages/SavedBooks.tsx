@@ -3,7 +3,7 @@ import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
 // import { deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
-// import { removeBookId } from "../utils/localStorage";
+import { removeBookId } from "../utils/localStorage";
 import type { User } from "../models/User";
 
 import { GET_ME } from "../utils/queries";
@@ -57,7 +57,7 @@ const SavedBooks = () => {
       const updatedUser = data.deleteBook;
       setUserData(updatedUser);
       // upon success, remove book's id from localStorage
-      // removeBookId(bookId);
+      removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
